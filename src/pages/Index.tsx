@@ -1,13 +1,45 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import React, { useState } from 'react';
+import { UserProfileForm } from '@/components/UserProfileForm';
+import { Dashboard } from '@/pages/Dashboard';
+
+interface UserProfile {
+  name: string;
+  userType: 'student' | 'professional';
+  age: string;
+  income: string;
+  goals: string;
+}
 
 const Index = () => {
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [showProfile, setShowProfile] = useState(false);
+
+  const handleProfileComplete = (profile: UserProfile) => {
+    setUserProfile(profile);
+  };
+
+  const handleProfileEdit = () => {
+    setShowProfile(true);
+  };
+
+  const handleProfileUpdate = (profile: UserProfile) => {
+    setUserProfile(profile);
+    setShowProfile(false);
+  };
+
+  if (showProfile || !userProfile) {
+    return (
+      <UserProfileForm 
+        onProfileComplete={showProfile ? handleProfileUpdate : handleProfileComplete} 
+      />
+    );
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <Dashboard 
+      profile={userProfile} 
+      onProfileEdit={handleProfileEdit} 
+    />
   );
 };
 
